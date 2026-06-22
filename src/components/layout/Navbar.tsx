@@ -1,255 +1,115 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 
 const navLinks = [
-  { href: '#services', label: 'Services' },
-  { href: '#portfolio', label: 'Work' },
-  { href: '#process', label: 'Process' },
-  { href: '#contact', label: 'Contact' },
-]
+  { label: 'Services', href: '#services' },
+  { label: 'Work', href: '#work' },
+  { label: 'Process', href: '#process' },
+  { label: 'Contact', href: '#contact' },
+];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > 40)
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
-    <header
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className="fixed top-0 left-0 right-0 z-50"
       style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        transition: 'all 0.4s ease',
-        backgroundColor: scrolled ? 'rgba(10,10,10,0.92)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(20px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
+        background: scrolled ? 'rgba(5,5,5,0.9)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(16px)' : 'none',
+        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : 'none',
+        transition: 'all 0.3s ease',
       }}
     >
-      <nav
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 24px',
-          height: '72px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <a
-          href="#hero"
-          style={{
-            textDecoration: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '2px',
-          }}
-        >
-          <span
-            style={{
-              fontSize: '22px',
-              fontWeight: 900,
-              letterSpacing: '-0.04em',
-              background: 'linear-gradient(135deg, #f8fafc 40%, #6366f1)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
+        <a href="#" className="text-xl font-black tracking-widest" style={{ color: '#f8fafc' }}>
+          <span style={{ background: 'linear-gradient(135deg,#6366f1,#22d3ee)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             FORTE
           </span>
-          <span
-            style={{
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              backgroundColor: '#6366f1',
-              marginLeft: '3px',
-              marginBottom: '12px',
-              boxShadow: '0 0 8px #6366f1',
-            }}
-          />
         </a>
 
-        {/* Desktop Nav Links */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-          }}
-          className="desktop-nav"
-        >
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
-              key={link.href}
+              key={link.label}
               href={link.href}
-              style={{
-                padding: '8px 16px',
-                color: '#64748b',
-                textDecoration: 'none',
-                fontSize: '14px',
-                fontWeight: 500,
-                borderRadius: '8px',
-                transition: 'color 0.2s, background 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#f8fafc'
-                e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#64748b'
-                e.currentTarget.style.background = 'transparent'
-              }}
+              className="text-sm font-medium"
+              style={{ color: '#94a3b8', transition: 'color 0.2s' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#f8fafc')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
             >
               {link.label}
             </a>
           ))}
           <a
             href="#contact"
+            className="px-5 py-2 rounded-full text-sm font-semibold"
             style={{
-              marginLeft: '8px',
-              padding: '9px 20px',
-              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
               color: '#fff',
-              textDecoration: 'none',
-              fontSize: '14px',
-              fontWeight: 600,
-              borderRadius: '8px',
-              boxShadow: '0 0 20px rgba(99,102,241,0.3)',
-              transition: 'transform 0.2s, box-shadow 0.2s',
-              letterSpacing: '0.01em',
+              boxShadow: '0 0 20px rgba(99,102,241,0.4)',
+              transition: 'box-shadow 0.2s',
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-1px)'
-              e.currentTarget.style.boxShadow = '0 0 30px rgba(99,102,241,0.5)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)'
-              e.currentTarget.style.boxShadow = '0 0 20px rgba(99,102,241,0.3)'
-            }}
+            onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 0 30px rgba(99,102,241,0.6)')}
+            onMouseLeave={(e) => (e.currentTarget.style.boxShadow = '0 0 20px rgba(99,102,241,0.4)')}
           >
-            Get in Touch
+            Start a Project
           </a>
-        </div>
+        </nav>
 
-        {/* Mobile menu button */}
+        {/* Mobile Menu Button */}
         <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          style={{
-            display: 'none',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: '#f8fafc',
-            padding: '8px',
-          }}
-          className="mobile-menu-btn"
-          aria-label="Toggle menu"
+          className="md:hidden"
+          style={{ color: '#f8fafc' }}
+          onClick={() => setMobileOpen(!mobileOpen)}
         >
-          <div style={{ width: '24px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            <span
-              style={{
-                display: 'block',
-                height: '2px',
-                background: '#f8fafc',
-                borderRadius: '1px',
-                transition: 'transform 0.2s',
-                transform: menuOpen ? 'rotate(45deg) translateY(7px)' : 'none',
-              }}
-            />
-            <span
-              style={{
-                display: 'block',
-                height: '2px',
-                background: '#f8fafc',
-                borderRadius: '1px',
-                opacity: menuOpen ? 0 : 1,
-                transition: 'opacity 0.2s',
-              }}
-            />
-            <span
-              style={{
-                display: 'block',
-                height: '2px',
-                background: '#f8fafc',
-                borderRadius: '1px',
-                transition: 'transform 0.2s',
-                transform: menuOpen ? 'rotate(-45deg) translateY(-7px)' : 'none',
-              }}
-            />
-          </div>
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-      </nav>
+      </div>
 
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div
-          style={{
-            backgroundColor: 'rgba(10,10,10,0.98)',
-            backdropFilter: 'blur(20px)',
-            borderTop: '1px solid rgba(255,255,255,0.06)',
-            padding: '20px 24px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '4px',
-          }}
+      {/* Mobile Menu */}
+      {mobileOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="md:hidden px-6 py-4 flex flex-col gap-4"
+          style={{ background: 'rgba(5,5,5,0.95)', borderTop: '1px solid rgba(255,255,255,0.06)' }}
         >
           {navLinks.map((link) => (
             <a
-              key={link.href}
+              key={link.label}
               href={link.href}
-              onClick={() => setMenuOpen(false)}
-              style={{
-                padding: '12px 16px',
-                color: '#64748b',
-                textDecoration: 'none',
-                fontSize: '16px',
-                fontWeight: 500,
-                borderRadius: '8px',
-                transition: 'color 0.2s',
-              }}
+              style={{ color: '#94a3b8' }}
+              onClick={() => setMobileOpen(false)}
             >
               {link.label}
             </a>
           ))}
           <a
             href="#contact"
-            onClick={() => setMenuOpen(false)}
-            style={{
-              marginTop: '8px',
-              padding: '12px 16px',
-              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-              color: '#fff',
-              textDecoration: 'none',
-              fontSize: '15px',
-              fontWeight: 600,
-              borderRadius: '8px',
-              textAlign: 'center',
-            }}
+            className="px-5 py-2 rounded-full text-sm font-semibold text-center"
+            style={{ background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', color: '#fff' }}
+            onClick={() => setMobileOpen(false)}
           >
-            Get in Touch
+            Start a Project
           </a>
-        </div>
+        </motion.div>
       )}
-
-      <style>{`
-        @media (max-width: 768px) {
-          .desktop-nav { display: none !important; }
-          .mobile-menu-btn { display: flex !important; }
-        }
-      `}</style>
-    </header>
-  )
+    </motion.header>
+  );
 }

@@ -1,163 +1,87 @@
-'use client'
+'use client';
 
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Float, OrbitControls } from '@react-three/drei'
-import { useRef, useMemo } from 'react'
-import * as THREE from 'three'
+import { useRef, useMemo } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Float } from '@react-three/drei';
+import * as THREE from 'three';
 
-function FloatingIcosahedron() {
-  const meshRef = useRef<THREE.Mesh>(null)
+function FloatingShape({
+  position,
+  geometry,
+  color,
+  speed,
+  rotationSpeed,
+}: {
+  position: [number, number, number];
+  geometry: 'icosahedron' | 'torus' | 'octahedron' | 'tetrahedron';
+  color: string;
+  speed: number;
+  rotationSpeed: number;
+}) {
+  const meshRef = useRef<THREE.Mesh>(null!);
 
-  useFrame((state) => {
-    if (!meshRef.current) return
-    meshRef.current.rotation.x = state.clock.elapsedTime * 0.15
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.2
-  })
+  useFrame((_, delta) => {
+    meshRef.current.rotation.x += delta * rotationSpeed * 0.5;
+    meshRef.current.rotation.y += delta * rotationSpeed;
+  });
 
-  return (
-    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1.2}>
-      <mesh ref={meshRef} position={[-2.5, 0.5, -1]}>
-        <icosahedronGeometry args={[1.0, 0]} />
-        <meshStandardMaterial
-          color="#6366f1"
-          wireframe
-          emissive="#6366f1"
-          emissiveIntensity={0.4}
-        />
-      </mesh>
-    </Float>
-  )
-}
-
-function FloatingTorusKnot() {
-  const meshRef = useRef<THREE.Mesh>(null)
-
-  useFrame((state) => {
-    if (!meshRef.current) return
-    meshRef.current.rotation.x = state.clock.elapsedTime * 0.1
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.25
-    meshRef.current.rotation.z = state.clock.elapsedTime * 0.05
-  })
-
-  return (
-    <Float speed={1.0} rotationIntensity={0.8} floatIntensity={0.8}>
-      <mesh ref={meshRef} position={[2.5, -0.5, -2]}>
-        <torusKnotGeometry args={[0.7, 0.22, 100, 16]} />
-        <meshStandardMaterial
-          color="#22d3ee"
-          wireframe
-          emissive="#22d3ee"
-          emissiveIntensity={0.5}
-        />
-      </mesh>
-    </Float>
-  )
-}
-
-function FloatingOctahedron() {
-  const meshRef = useRef<THREE.Mesh>(null)
-
-  useFrame((state) => {
-    if (!meshRef.current) return
-    meshRef.current.rotation.x = state.clock.elapsedTime * 0.3
-    meshRef.current.rotation.z = state.clock.elapsedTime * 0.2
-  })
-
-  return (
-    <Float speed={2.0} rotationIntensity={1.2} floatIntensity={1.5}>
-      <mesh ref={meshRef} position={[0.5, 1.5, -3]}>
-        <octahedronGeometry args={[0.8, 0]} />
-        <meshStandardMaterial
-          color="#8b5cf6"
-          wireframe
-          emissive="#8b5cf6"
-          emissiveIntensity={0.6}
-        />
-      </mesh>
-    </Float>
-  )
-}
-
-function FloatingSphere() {
-  const meshRef = useRef<THREE.Mesh>(null)
-  useFrame((state) => {
-    if (!meshRef.current) return
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.15
-  })
-
-  return (
-    <Float speed={1.2} rotationIntensity={0.3} floatIntensity={0.6}>
-      <mesh ref={meshRef} position={[-1.0, -1.8, -1.5]}>
-        <sphereGeometry args={[0.5, 16, 16]} />
-        <meshStandardMaterial
-          color="#22d3ee"
-          wireframe
-          emissive="#22d3ee"
-          emissiveIntensity={0.3}
-          opacity={0.7}
-          transparent
-        />
-      </mesh>
-    </Float>
-  )
-}
-
-function Particles() {
-  const count = 120
-  const positions = useMemo(() => {
-    const pos = new Float32Array(count * 3)
-    for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 14
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 10
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 8 - 2
+  const geo = useMemo(() => {
+    switch (geometry) {
+      case 'icosahedron': return new THREE.IcosahedronGeometry(1, 0);
+      case 'torus': return new THREE.TorusGeometry(0.8, 0.25, 8, 16);
+      case 'octahedron': return new THREE.OctahedronGeometry(1);
+      case 'tetrahedron': return new THREE.TetrahedronGeometry(1);
     }
-    return pos
-  }, [])
-
-  const pointsRef = useRef<THREE.Points>(null)
-  useFrame((state) => {
-    if (!pointsRef.current) return
-    pointsRef.current.rotation.y = state.clock.elapsedTime * 0.02
-  })
+  }, [geometry]);
 
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          args={[positions, 3]}
-          attach="attributes-position"
+    <Float speed={speed} rotationIntensity={0.3} floatIntensity={0.8}>
+      <mesh ref={meshRef} position={position} geometry={geo}>
+        <meshStandardMaterial
+          color={color}
+          wireframe
+          transparent
+          opacity={0.4}
         />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.03}
-        color="#6366f1"
-        transparent
-        opacity={0.6}
-        sizeAttenuation
-      />
-    </points>
-  )
+      </mesh>
+    </Float>
+  );
 }
+
+function CameraRig() {
+  const { camera, mouse } = useThree();
+  useFrame(() => {
+    camera.position.x += (mouse.x * 1.5 - camera.position.x) * 0.05;
+    camera.position.y += (mouse.y * 1.5 - camera.position.y) * 0.05;
+    camera.lookAt(0, 0, 0);
+  });
+  return null;
+}
+
+const shapes = [
+  { position: [-4, 2, -3] as [number, number, number], geometry: 'icosahedron' as const, color: '#6366f1', speed: 1.5, rotationSpeed: 0.3 },
+  { position: [4, -1, -4] as [number, number, number], geometry: 'torus' as const, color: '#22d3ee', speed: 2, rotationSpeed: 0.5 },
+  { position: [-2, -3, -2] as [number, number, number], geometry: 'octahedron' as const, color: '#8b5cf6', speed: 1.2, rotationSpeed: 0.4 },
+  { position: [3, 3, -5] as [number, number, number], geometry: 'tetrahedron' as const, color: '#6366f1', speed: 1.8, rotationSpeed: 0.2 },
+  { position: [0, -2, -6] as [number, number, number], geometry: 'icosahedron' as const, color: '#22d3ee', speed: 1.3, rotationSpeed: 0.6 },
+  { position: [-5, 0, -5] as [number, number, number], geometry: 'torus' as const, color: '#8b5cf6', speed: 2.2, rotationSpeed: 0.35 },
+];
 
 export default function Scene() {
   return (
-    <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}>
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 60 }}
-        style={{ background: 'transparent' }}
-        gl={{ alpha: true, antialias: true }}
-      >
-        <ambientLight intensity={0.1} />
-        <pointLight position={[-3, 3, 2]} color="#6366f1" intensity={3} />
-        <pointLight position={[3, -3, 2]} color="#22d3ee" intensity={3} />
-        <pointLight position={[0, 0, 4]} color="#ffffff" intensity={0.5} />
-
-        <FloatingIcosahedron />
-        <FloatingTorusKnot />
-        <FloatingOctahedron />
-        <FloatingSphere />
-        <Particles />
-      </Canvas>
-    </div>
-  )
+    <Canvas
+      camera={{ position: [0, 0, 6], fov: 60 }}
+      gl={{ antialias: true, alpha: true }}
+      style={{ background: 'transparent' }}
+    >
+      <ambientLight intensity={0.2} />
+      <pointLight position={[5, 5, 5]} intensity={1} color="#6366f1" />
+      <pointLight position={[-5, -5, 5]} intensity={0.8} color="#22d3ee" />
+      <pointLight position={[0, 0, 3]} intensity={0.5} color="#ffffff" />
+      {shapes.map((shape, i) => (
+        <FloatingShape key={i} {...shape} />
+      ))}
+      <CameraRig />
+    </Canvas>
+  );
 }

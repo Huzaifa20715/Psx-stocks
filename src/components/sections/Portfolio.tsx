@@ -1,262 +1,179 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import TiltCard from '@/components/ui/TiltCard'
+import { motion } from 'framer-motion';
+import TiltCard from '@/components/ui/TiltCard';
+import { ArrowUpRight } from 'lucide-react';
 
 const projects = [
   {
     title: 'KSE Trading Platform',
-    description: 'Real-time stock trading dashboard with live charts and portfolio analytics.',
-    tags: ['Next.js', 'WebSockets', 'D3.js'],
-    gradient: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a5f 100%)',
-    accent: '#6366f1',
-    number: '01',
+    category: 'Web App · 3D Dashboard',
+    gradient: 'linear-gradient(135deg, #6366f1 0%, #0f172a 100%)',
+    tags: ['Three.js', 'Next.js', 'Real-time'],
+    year: '2025',
   },
   {
     title: 'Dubai Real Estate',
-    description: 'Luxury property showcase with 3D virtual tours and immersive visuals.',
-    tags: ['Three.js', 'GSAP', 'React'],
-    gradient: 'linear-gradient(135deg, #0c1a2e 0%, #1a3a4c 50%, #0e2436 100%)',
-    accent: '#22d3ee',
-    number: '02',
+    category: 'Luxury · Immersive UI',
+    gradient: 'linear-gradient(135deg, #f59e0b 0%, #0f172a 100%)',
+    tags: ['WebGL', 'GSAP', '3D Tours'],
+    year: '2025',
   },
   {
     title: 'Crypto Dashboard',
-    description: 'Advanced cryptocurrency analytics with real-time market data and alerts.',
-    tags: ['React', 'WebGL', 'Node.js'],
-    gradient: 'linear-gradient(135deg, #1a0533 0%, #2d1b69 50%, #1a1a3a 100%)',
-    accent: '#8b5cf6',
-    number: '03',
+    category: 'FinTech · Data Viz',
+    gradient: 'linear-gradient(135deg, #22d3ee 0%, #0f172a 100%)',
+    tags: ['React', 'D3.js', 'WebSockets'],
+    year: '2024',
   },
   {
-    title: 'Fashion E-commerce',
-    description: 'High-end fashion store with 3D product visualization and AR try-on.',
-    tags: ['Next.js', 'Three.js', 'Stripe'],
-    gradient: 'linear-gradient(135deg, #1a0a0a 0%, #3d1515 50%, #1a1a0a 100%)',
-    accent: '#f59e0b',
-    number: '04',
+    title: 'Fashion E-Commerce',
+    category: 'Retail · Premium UX',
+    gradient: 'linear-gradient(135deg, #ec4899 0%, #0f172a 100%)',
+    tags: ['Next.js', 'Framer', 'Shopify'],
+    year: '2024',
   },
   {
     title: 'Hotel Booking',
-    description: 'Luxury hotel booking platform with immersive room previews and smooth UX.',
-    tags: ['React', 'Framer Motion', 'Prisma'],
-    gradient: 'linear-gradient(135deg, #0a1a15 0%, #0d3320 50%, #0a1525 100%)',
-    accent: '#10b981',
-    number: '05',
+    category: 'Hospitality · 3D Rooms',
+    gradient: 'linear-gradient(135deg, #10b981 0%, #0f172a 100%)',
+    tags: ['Three.js', 'TypeScript', 'AR'],
+    year: '2024',
   },
   {
     title: 'Fitness App',
-    description: 'Premium fitness tracking app with 3D body visualization and workout plans.',
-    tags: ['React Native', 'Three.js', 'GraphQL'],
-    gradient: 'linear-gradient(135deg, #1a0a2e 0%, #2d0a4c 50%, #0a1a3a 100%)',
-    accent: '#ec4899',
-    number: '06',
+    category: 'Health · Motion Design',
+    gradient: 'linear-gradient(135deg, #8b5cf6 0%, #0f172a 100%)',
+    tags: ['React Native', 'GSAP', '3D'],
+    year: '2024',
   },
-]
-
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
-}
+];
 
 export default function Portfolio() {
   return (
-    <section
-      id="portfolio"
-      style={{
-        padding: '120px 24px',
-        backgroundColor: '#0a0a0a',
-        position: 'relative',
-      }}
-    >
-      {/* Background glow */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '40%',
-          right: '-5%',
-          width: '500px',
-          height: '500px',
-          background: 'radial-gradient(circle, rgba(34,211,238,0.06) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-
+    <section id="work" style={{ padding: '8rem 1.5rem', background: '#080808' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Section Header */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7 }}
-          style={{ marginBottom: '80px' }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          style={{ marginBottom: '4rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1rem' }}
         >
-          <p
-            style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: '#22d3ee',
-              marginBottom: '16px',
-            }}
-          >
-            Portfolio
-          </p>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px' }}>
-            <h2
-              style={{
-                fontSize: 'clamp(32px, 5vw, 60px)',
-                fontWeight: 800,
-                letterSpacing: '-0.02em',
-                color: '#f8fafc',
-              }}
-            >
-              Selected Work
+          <div>
+            <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#22d3ee', marginBottom: '1rem' }}>
+              Our Work
+            </span>
+            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, color: '#f8fafc', lineHeight: 1.15 }}>
+              Selected
+              <br />
+              <span style={{ background: 'linear-gradient(135deg,#22d3ee,#6366f1)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                Projects
+              </span>
             </h2>
-            <p style={{ color: '#64748b', fontSize: '14px', maxWidth: '300px', lineHeight: 1.6 }}>
-              A curated selection of projects that showcase our capabilities across industries.
-            </p>
           </div>
-          <div
-            style={{
-              width: '60px',
-              height: '3px',
-              background: 'linear-gradient(90deg, #22d3ee, #6366f1)',
-              borderRadius: '2px',
-              marginTop: '24px',
-            }}
-          />
+          <p style={{ color: '#64748b', maxWidth: '280px', lineHeight: 1.7, fontSize: '0.9rem' }}>
+            A curated selection of our most impactful digital experiences.
+          </p>
         </motion.div>
 
-        {/* Projects Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
+        {/* Grid */}
+        <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-            gap: '24px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+            gap: '1.5rem',
           }}
         >
-          {projects.map((project) => (
-            <motion.div key={project.title} variants={cardVariants}>
-              <TiltCard
-                style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                }}
-              >
-                {/* Project visual */}
+          {projects.map((project, i) => (
+            <motion.div
+              key={project.title}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08, duration: 0.6 }}
+            >
+              <TiltCard>
                 <div
                   style={{
-                    height: '200px',
-                    background: project.gradient,
-                    position: 'relative',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    borderRadius: '1rem',
                     overflow: 'hidden',
+                    border: '1px solid rgba(255,255,255,0.07)',
+                    cursor: 'pointer',
+                    position: 'relative',
                   }}
                 >
-                  {/* Grid lines decoration */}
+                  {/* Image area */}
                   <div
                     style={{
+                      height: '220px',
+                      background: project.gradient,
+                      position: 'relative',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <div style={{
                       position: 'absolute',
                       inset: 0,
-                      backgroundImage: `linear-gradient(${project.accent}15 1px, transparent 1px), linear-gradient(90deg, ${project.accent}15 1px, transparent 1px)`,
-                      backgroundSize: '40px 40px',
-                    }}
-                  />
+                      background: 'rgba(0,0,0,0.3)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                      <div style={{
+                        width: '60px',
+                        height: '60px',
+                        borderRadius: '50%',
+                        background: 'rgba(255,255,255,0.1)',
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                        <ArrowUpRight size={24} color="white" />
+                      </div>
+                    </div>
+                    <span style={{ position: 'absolute', top: '1rem', right: '1rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', fontFamily: 'monospace' }}>
+                      {project.year}
+                    </span>
+                  </div>
 
-                  {/* Project number */}
-                  <span
-                    style={{
-                      fontSize: '80px',
-                      fontWeight: 900,
-                      color: `${project.accent}20`,
-                      letterSpacing: '-0.05em',
-                      lineHeight: 1,
-                      position: 'relative',
-                      zIndex: 1,
-                    }}
-                  >
-                    {project.number}
-                  </span>
-
-                  {/* Corner accent */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '16px',
-                      right: '16px',
-                      width: '8px',
-                      height: '8px',
-                      borderRadius: '50%',
-                      backgroundColor: project.accent,
-                      boxShadow: `0 0 12px ${project.accent}`,
-                    }}
-                  />
-                </div>
-
-                {/* Project info */}
-                <div style={{ padding: '24px' }}>
-                  <h3
-                    style={{
-                      fontSize: '18px',
-                      fontWeight: 700,
-                      color: '#f8fafc',
-                      marginBottom: '8px',
-                      letterSpacing: '-0.01em',
-                    }}
-                  >
-                    {project.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontSize: '13px',
-                      lineHeight: 1.6,
-                      color: '#64748b',
-                      marginBottom: '16px',
-                    }}
-                  >
-                    {project.description}
-                  </p>
-                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        style={{
-                          fontSize: '11px',
-                          fontWeight: 600,
-                          padding: '3px 10px',
-                          borderRadius: '100px',
-                          background: `${project.accent}12`,
-                          color: project.accent,
-                          border: `1px solid ${project.accent}25`,
-                          letterSpacing: '0.04em',
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                  {/* Info */}
+                  <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.03)' }}>
+                    <p style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.4rem', letterSpacing: '0.05em' }}>
+                      {project.category}
+                    </p>
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f8fafc', marginBottom: '1rem' }}>
+                      {project.title}
+                    </h3>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          style={{
+                            padding: '0.15rem 0.6rem',
+                            borderRadius: '999px',
+                            fontSize: '0.7rem',
+                            fontWeight: 500,
+                            background: 'rgba(255,255,255,0.05)',
+                            color: '#94a3b8',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </TiltCard>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
-  )
+  );
 }

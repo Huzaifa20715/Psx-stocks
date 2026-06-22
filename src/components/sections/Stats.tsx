@@ -1,250 +1,103 @@
-'use client'
+'use client';
 
-import { useEffect, useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 
-interface CounterProps {
-  target: number
-  suffix?: string
-  prefix?: string
-  duration?: number
-}
-
-function Counter({ target, suffix = '', prefix = '', duration = 2000 }: CounterProps) {
-  const [count, setCount] = useState(0)
-  const ref = useRef<HTMLSpanElement>(null)
-  const isInView = useInView(ref, { once: true, margin: '-60px' })
-  const startTime = useRef<number | null>(null)
-  const rafRef = useRef<number | null>(null)
+function AnimatedNumber({ target, suffix = '' }: { target: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+  const motionVal = useMotionValue(0);
+  const spring = useSpring(motionVal, { stiffness: 60, damping: 20 });
+  const rounded = useTransform(spring, (v) => Math.round(v));
 
   useEffect(() => {
-    if (!isInView) return
-
-    startTime.current = null
-
-    function animate(timestamp: number) {
-      if (!startTime.current) startTime.current = timestamp
-      const elapsed = timestamp - startTime.current
-      const progress = Math.min(elapsed / duration, 1)
-      // Ease out cubic
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setCount(Math.round(eased * target))
-
-      if (progress < 1) {
-        rafRef.current = requestAnimationFrame(animate)
-      }
-    }
-
-    rafRef.current = requestAnimationFrame(animate)
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    }
-  }, [isInView, target, duration])
+    if (inView) motionVal.set(target);
+  }, [inView, motionVal, target]);
 
   return (
     <span ref={ref}>
-      {prefix}{count}{suffix}
+      <motion.span>{rounded}</motion.span>
+      {suffix}
     </span>
-  )
+  );
 }
 
 const stats = [
-  {
-    prefix: '',
-    number: 150,
-    suffix: '+',
-    label: 'Projects Delivered',
-    description: 'From startups to enterprise, each built to the highest standard.',
-    color: '#6366f1',
-  },
-  {
-    prefix: '',
-    number: 98,
-    suffix: '%',
-    label: 'Client Satisfaction',
-    description: 'We don\'t just meet expectations — we exceed them, every time.',
-    color: '#22d3ee',
-  },
-  {
-    prefix: '',
-    number: 5,
-    suffix: '+',
-    label: 'Years Experience',
-    description: 'Half a decade crafting exceptional digital products.',
-    color: '#8b5cf6',
-  },
-]
+  { value: 150, suffix: '+', label: 'Projects Delivered', accent: '#6366f1' },
+  { value: 98, suffix: '%', label: 'Client Satisfaction', accent: '#22d3ee' },
+  { value: 5, suffix: '+', label: 'Years Experience', accent: '#8b5cf6' },
+  { value: 40, suffix: '+', label: 'Team Members', accent: '#f59e0b' },
+];
 
 export default function Stats() {
   return (
     <section
-      id="stats"
       style={{
-        padding: '120px 24px',
-        backgroundColor: '#0a0a0a',
-        position: 'relative',
-        overflow: 'hidden',
+        padding: '8rem 1.5rem',
+        background: 'linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(34,211,238,0.05) 100%)',
+        borderTop: '1px solid rgba(255,255,255,0.05)',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
       }}
     >
-      {/* Decorative grid */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* Center glow */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '600px',
-          height: '300px',
-          background:
-            'radial-gradient(ellipse, rgba(99,102,241,0.1) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        {/* Header */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7 }}
-          style={{ textAlign: 'center', marginBottom: '80px' }}
+          viewport={{ once: true }}
+          style={{ textAlign: 'center', marginBottom: '4rem' }}
         >
-          <p
-            style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: '#22d3ee',
-              marginBottom: '16px',
-            }}
-          >
-            By The Numbers
-          </p>
-          <h2
-            style={{
-              fontSize: 'clamp(32px, 5vw, 60px)',
-              fontWeight: 800,
-              letterSpacing: '-0.02em',
-              color: '#f8fafc',
-            }}
-          >
-            Results That Speak
+          <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 900, color: '#f8fafc' }}>
+            Numbers That{' '}
+            <span style={{ background: 'linear-gradient(135deg,#6366f1,#22d3ee)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+              Speak
+            </span>
           </h2>
         </motion.div>
 
-        {/* Stats Grid */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '2px',
-            border: '1px solid rgba(255,255,255,0.06)',
-            borderRadius: '20px',
-            overflow: 'hidden',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '2rem',
+            textAlign: 'center',
           }}
         >
-          {stats.map((stat, index) => (
+          {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.6 }}
               style={{
-                padding: '60px 48px',
-                background: 'rgba(255,255,255,0.02)',
-                textAlign: 'center',
-                position: 'relative',
-                borderRight:
-                  index < stats.length - 1
-                    ? '1px solid rgba(255,255,255,0.06)'
-                    : 'none',
+                padding: '2.5rem 1.5rem',
+                borderRadius: '1rem',
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.07)',
               }}
             >
-              {/* Top accent */}
               <div
                 style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: '60px',
-                  height: '2px',
-                  background: `linear-gradient(90deg, transparent, ${stat.color}, transparent)`,
-                }}
-              />
-
-              {/* Number */}
-              <div
-                style={{
-                  fontSize: 'clamp(56px, 8vw, 88px)',
+                  fontSize: 'clamp(2.5rem, 6vw, 4rem)',
                   fontWeight: 900,
-                  letterSpacing: '-0.04em',
-                  lineHeight: 1,
-                  marginBottom: '12px',
-                  background: `linear-gradient(135deg, ${stat.color}, ${stat.color}99)`,
+                  fontFamily: 'monospace',
+                  background: `linear-gradient(135deg, ${stat.accent}, ${stat.accent}80)`,
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
+                  lineHeight: 1.1,
+                  marginBottom: '0.5rem',
                 }}
               >
-                <Counter
-                  target={stat.number}
-                  suffix={stat.suffix}
-                  prefix={stat.prefix}
-                />
+                <AnimatedNumber target={stat.value} suffix={stat.suffix} />
               </div>
-
-              {/* Label */}
-              <div
-                style={{
-                  fontSize: '18px',
-                  fontWeight: 700,
-                  color: '#f8fafc',
-                  marginBottom: '10px',
-                  letterSpacing: '-0.01em',
-                }}
-              >
+              <p style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: 500 }}>
                 {stat.label}
-              </div>
-
-              {/* Description */}
-              <p
-                style={{
-                  fontSize: '13px',
-                  lineHeight: 1.6,
-                  color: '#64748b',
-                  maxWidth: '240px',
-                  margin: '0 auto',
-                }}
-              >
-                {stat.description}
               </p>
             </motion.div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,496 +1,282 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { Send, Mail, ArrowUpRight } from 'lucide-react';
+
+const projectTypes = [
+  '3D / WebGL Website',
+  'E-Commerce',
+  'Web Application',
+  'Brand Identity',
+  'Other',
+];
 
 export default function Contact() {
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    projectType: '',
-    message: '',
-  })
-  const [submitted, setSubmitted] = useState(false)
+  const [form, setForm] = useState({ name: '', email: '', type: '', message: '' });
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-  ) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setSubmitted(true)
-  }
-
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '14px 18px',
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: '10px',
-    color: '#f8fafc',
-    fontSize: '14px',
-    outline: 'none',
-    transition: 'border-color 0.2s, box-shadow 0.2s',
-    fontFamily: 'inherit',
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    await new Promise((r) => setTimeout(r, 1500));
+    setSending(false);
+    setSent(true);
+  };
 
   return (
-    <section
-      id="contact"
-      style={{
-        padding: '120px 24px',
-        backgroundColor: '#050505',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Background glow */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '-20%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '800px',
-          height: '400px',
-          background:
-            'radial-gradient(ellipse, rgba(99,102,241,0.08) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-
-      <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        {/* Section Header */}
+    <section id="contact" style={{ padding: '8rem 1.5rem', background: '#050505' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7 }}
-          style={{ textAlign: 'center', marginBottom: '80px' }}
+          viewport={{ once: true }}
+          style={{ textAlign: 'center', marginBottom: '5rem' }}
         >
-          <p
-            style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: '#6366f1',
-              marginBottom: '16px',
-            }}
-          >
+          <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#6366f1', marginBottom: '1rem' }}>
             Get In Touch
-          </p>
-          <h2
-            style={{
-              fontSize: 'clamp(28px, 4.5vw, 56px)',
-              fontWeight: 800,
-              letterSpacing: '-0.02em',
-              color: '#f8fafc',
-              marginBottom: '20px',
-              lineHeight: 1.1,
-            }}
-          >
-            Let&apos;s Build Something<br />
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #6366f1, #22d3ee)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
+          </span>
+          <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, color: '#f8fafc', lineHeight: 1.2 }}>
+            Let&apos;s Build Something
+            <br />
+            <span style={{ background: 'linear-gradient(135deg,#6366f1,#22d3ee)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               Incredible
             </span>
           </h2>
-          <div
-            style={{
-              width: '60px',
-              height: '3px',
-              background: 'linear-gradient(90deg, #6366f1, #22d3ee)',
-              borderRadius: '2px',
-              margin: '0 auto',
-            }}
-          />
         </motion.div>
 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '60px',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '4rem',
             alignItems: 'start',
           }}
+          className="contact-grid"
         >
           {/* Form */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
-            {submitted ? (
+            {sent ? (
               <div
                 style={{
                   textAlign: 'center',
-                  padding: '60px 40px',
+                  padding: '4rem 2rem',
                   background: 'rgba(99,102,241,0.08)',
                   border: '1px solid rgba(99,102,241,0.2)',
-                  borderRadius: '16px',
+                  borderRadius: '1rem',
                 }}
               >
-                <div style={{ fontSize: '48px', marginBottom: '20px' }}>✓</div>
-                <h3 style={{ fontSize: '22px', fontWeight: 700, color: '#f8fafc', marginBottom: '10px' }}>
-                  Message Sent!
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✨</div>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#f8fafc', marginBottom: '0.5rem' }}>
+                  Message Received!
                 </h3>
-                <p style={{ color: '#64748b', fontSize: '14px', lineHeight: 1.6 }}>
-                  Thanks for reaching out. We&apos;ll be in touch within 24 hours.
-                </p>
+                <p style={{ color: '#64748b' }}>We&apos;ll get back to you within 24 hours.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <div>
-                  <label
-                    style={{
-                      display: 'block',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      color: '#64748b',
-                      marginBottom: '8px',
-                    }}
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder="Your full name"
-                    required
-                    style={inputStyle}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#6366f1'
-                      e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = 'rgba(255,255,255,0.1)'
-                      e.target.style.boxShadow = 'none'
-                    }}
-                  />
-                </div>
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {[
+                  { key: 'name', label: 'Your Name', placeholder: 'John Doe', type: 'text' },
+                  { key: 'email', label: 'Email Address', placeholder: 'john@company.com', type: 'email' },
+                ].map((field) => (
+                  <div key={field.key}>
+                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#94a3b8', marginBottom: '0.5rem', fontWeight: 500 }}>
+                      {field.label}
+                    </label>
+                    <input
+                      type={field.type}
+                      placeholder={field.placeholder}
+                      value={form[field.key as keyof typeof form]}
+                      onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
+                      required
+                      style={{
+                        width: '100%',
+                        padding: '0.85rem 1rem',
+                        background: 'rgba(255,255,255,0.04)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: '0.625rem',
+                        color: '#f8fafc',
+                        fontSize: '0.9rem',
+                        outline: 'none',
+                        transition: 'border-color 0.2s',
+                      }}
+                      onFocus={(e) => (e.target.style.borderColor = '#6366f1')}
+                      onBlur={(e) => (e.target.style.borderColor = 'rgba(255,255,255,0.1)')}
+                    />
+                  </div>
+                ))}
 
+                {/* Project type */}
                 <div>
-                  <label
-                    style={{
-                      display: 'block',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      color: '#64748b',
-                      marginBottom: '8px',
-                    }}
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    placeholder="your@email.com"
-                    required
-                    style={inputStyle}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#6366f1'
-                      e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = 'rgba(255,255,255,0.1)'
-                      e.target.style.boxShadow = 'none'
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label
-                    style={{
-                      display: 'block',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      color: '#64748b',
-                      marginBottom: '8px',
-                    }}
-                  >
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#94a3b8', marginBottom: '0.5rem', fontWeight: 500 }}>
                     Project Type
                   </label>
                   <select
-                    name="projectType"
-                    value={form.projectType}
-                    onChange={handleChange}
-                    required
-                    style={{ ...inputStyle, cursor: 'pointer' }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#6366f1'
-                      e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = 'rgba(255,255,255,0.1)'
-                      e.target.style.boxShadow = 'none'
+                    value={form.type}
+                    onChange={(e) => setForm({ ...form, type: e.target.value })}
+                    style={{
+                      width: '100%',
+                      padding: '0.85rem 1rem',
+                      background: 'rgba(255,255,255,0.04)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '0.625rem',
+                      color: form.type ? '#f8fafc' : '#64748b',
+                      fontSize: '0.9rem',
+                      outline: 'none',
+                      cursor: 'pointer',
                     }}
                   >
-                    <option value="" style={{ background: '#0a0a0a' }}>Select project type</option>
-                    <option value="3d-webgl" style={{ background: '#0a0a0a' }}>3D / WebGL Experience</option>
-                    <option value="web-design" style={{ background: '#0a0a0a' }}>Web Design & Development</option>
-                    <option value="branding" style={{ background: '#0a0a0a' }}>Brand Identity</option>
-                    <option value="ecommerce" style={{ background: '#0a0a0a' }}>E-commerce</option>
-                    <option value="other" style={{ background: '#0a0a0a' }}>Other</option>
+                    <option value="" disabled style={{ background: '#0f172a' }}>Select project type</option>
+                    {projectTypes.map((t) => (
+                      <option key={t} value={t} style={{ background: '#0f172a', color: '#f8fafc' }}>{t}</option>
+                    ))}
                   </select>
                 </div>
 
+                {/* Message */}
                 <div>
-                  <label
-                    style={{
-                      display: 'block',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      color: '#64748b',
-                      marginBottom: '8px',
-                    }}
-                  >
-                    Message
+                  <label style={{ display: 'block', fontSize: '0.8rem', color: '#94a3b8', marginBottom: '0.5rem', fontWeight: 500 }}>
+                    Tell Us About Your Project
                   </label>
                   <textarea
-                    name="message"
+                    rows={4}
+                    placeholder="Describe your vision, goals, and any specific requirements..."
                     value={form.message}
-                    onChange={handleChange}
-                    placeholder="Tell us about your project..."
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
                     required
-                    rows={5}
-                    style={{ ...inputStyle, resize: 'vertical', minHeight: '120px' }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#6366f1'
-                      e.target.style.boxShadow = '0 0 0 3px rgba(99,102,241,0.1)'
+                    style={{
+                      width: '100%',
+                      padding: '0.85rem 1rem',
+                      background: 'rgba(255,255,255,0.04)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '0.625rem',
+                      color: '#f8fafc',
+                      fontSize: '0.9rem',
+                      outline: 'none',
+                      resize: 'vertical',
+                      fontFamily: 'inherit',
+                      transition: 'border-color 0.2s',
                     }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = 'rgba(255,255,255,0.1)'
-                      e.target.style.boxShadow = 'none'
-                    }}
+                    onFocus={(e) => (e.target.style.borderColor = '#6366f1')}
+                    onBlur={(e) => (e.target.style.borderColor = 'rgba(255,255,255,0.1)')}
                   />
                 </div>
 
                 <button
                   type="submit"
+                  disabled={sending}
                   style={{
-                    padding: '16px 32px',
-                    background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                    padding: '1rem 2rem',
+                    background: sending ? 'rgba(99,102,241,0.5)' : 'linear-gradient(135deg,#6366f1,#8b5cf6)',
                     color: '#fff',
-                    fontWeight: 700,
-                    fontSize: '15px',
-                    borderRadius: '10px',
                     border: 'none',
-                    cursor: 'pointer',
-                    boxShadow: '0 0 30px rgba(99,102,241,0.4)',
-                    transition: 'transform 0.2s, box-shadow 0.2s',
-                    fontFamily: 'inherit',
-                    letterSpacing: '0.02em',
+                    borderRadius: '0.625rem',
+                    fontSize: '0.95rem',
+                    fontWeight: 600,
+                    cursor: sending ? 'not-allowed' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
+                    boxShadow: '0 0 25px rgba(99,102,241,0.3)',
+                    transition: 'all 0.3s',
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)'
-                    e.currentTarget.style.boxShadow = '0 0 50px rgba(99,102,241,0.6)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = '0 0 30px rgba(99,102,241,0.4)'
-                  }}
+                  onMouseEnter={(e) => { if (!sending) e.currentTarget.style.boxShadow = '0 0 40px rgba(99,102,241,0.5)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 25px rgba(99,102,241,0.3)'; }}
                 >
-                  Send Message →
+                  {sending ? 'Sending...' : 'Send Message'}
+                  <Send size={16} />
                 </button>
               </form>
             )}
           </motion.div>
 
-          {/* Contact Info */}
+          {/* Info */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            style={{ paddingTop: '8px' }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}
           >
-            <h3
-              style={{
-                fontSize: '22px',
-                fontWeight: 700,
-                color: '#f8fafc',
-                marginBottom: '12px',
-                letterSpacing: '-0.01em',
-              }}
-            >
-              Start a Conversation
-            </h3>
-            <p
-              style={{
-                fontSize: '14px',
-                lineHeight: 1.7,
-                color: '#64748b',
-                marginBottom: '40px',
-              }}
-            >
-              Whether you have a fully formed idea or just a spark of inspiration, we&apos;d love to hear from you. Our team typically responds within 24 hours.
-            </p>
-
-            {/* Contact details */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              {[
-                {
-                  icon: '✉',
-                  label: 'Email',
-                  value: 'hello@forte.agency',
-                  color: '#6366f1',
-                },
-                {
-                  icon: '◎',
-                  label: 'Location',
-                  value: 'Karachi, Pakistan',
-                  color: '#22d3ee',
-                },
-                {
-                  icon: '◉',
-                  label: 'Available',
-                  value: 'Monday – Friday, 9AM – 6PM PKT',
-                  color: '#8b5cf6',
-                },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '16px',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '10px',
-                      background: `${item.color}15`,
-                      border: `1px solid ${item.color}25`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '16px',
-                      color: item.color,
-                      flexShrink: 0,
-                    }}
-                  >
-                    {item.icon}
-                  </div>
-                  <div>
-                    <div
-                      style={{
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        letterSpacing: '0.1em',
-                        textTransform: 'uppercase',
-                        color: '#64748b',
-                        marginBottom: '4px',
-                      }}
-                    >
-                      {item.label}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: '15px',
-                        color: '#f8fafc',
-                        fontWeight: 500,
-                      }}
-                    >
-                      {item.value}
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f8fafc', marginBottom: '0.75rem' }}>
+                Ready to transform your digital presence?
+              </h3>
+              <p style={{ color: '#64748b', lineHeight: 1.7 }}>
+                We&apos;re a passionate team of designers and developers who live at the intersection of art and technology. Let&apos;s create something unforgettable.
+              </p>
             </div>
 
-            {/* Social links */}
-            <div
+            {/* Email card */}
+            <a
+              href="mailto:connectwithforte@gmail.com"
               style={{
-                marginTop: '48px',
-                paddingTop: '32px',
-                borderTop: '1px solid rgba(255,255,255,0.06)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                padding: '1.25rem 1.5rem',
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '0.875rem',
+                textDecoration: 'none',
+                transition: 'all 0.3s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(99,102,241,0.08)';
+                e.currentTarget.style.borderColor = 'rgba(99,102,241,0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
               }}
             >
-              <p
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: '#64748b',
-                  marginBottom: '16px',
-                }}
-              >
-                Follow Us
-              </p>
-              <div style={{ display: 'flex', gap: '12px' }}>
-                {['Twitter', 'LinkedIn', 'Dribbble', 'GitHub'].map((social) => (
-                  <button
-                    key={social}
-                    style={{
-                      padding: '8px 16px',
-                      background: 'rgba(255,255,255,0.04)',
-                      border: '1px solid rgba(255,255,255,0.08)',
-                      borderRadius: '8px',
-                      color: '#64748b',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      fontFamily: 'inherit',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#f8fafc'
-                      e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)'
-                      e.currentTarget.style.background = 'rgba(99,102,241,0.08)'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = '#64748b'
-                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
-                    }}
-                  >
-                    {social}
-                  </button>
-                ))}
+              <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(99,102,241,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Mail size={20} color="#6366f1" />
               </div>
+              <div>
+                <p style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.2rem' }}>Email us at</p>
+                <p style={{ color: '#f8fafc', fontWeight: 600, fontSize: '0.9rem' }}>connectwithforte@gmail.com</p>
+              </div>
+              <ArrowUpRight size={18} color="#64748b" style={{ marginLeft: 'auto' }} />
+            </a>
+
+            {/* Badges */}
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              {['24h Response', 'Free Consultation', 'NDA Available'].map((badge) => (
+                <span
+                  key={badge}
+                  style={{
+                    padding: '0.4rem 1rem',
+                    borderRadius: '999px',
+                    fontSize: '0.8rem',
+                    fontWeight: 500,
+                    background: 'rgba(255,255,255,0.04)',
+                    color: '#94a3b8',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                  }}
+                >
+                  ✓ {badge}
+                </span>
+              ))}
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Footer */}
-      <div
-        style={{
-          marginTop: '80px',
-          paddingTop: '40px',
-          borderTop: '1px solid rgba(255,255,255,0.06)',
-          textAlign: 'center',
-          color: '#64748b',
-          fontSize: '13px',
-        }}
-      >
-        <p>© 2026 FORTE Agency. Crafted with precision.</p>
-      </div>
+      <style>{`
+        @media (max-width: 768px) {
+          .contact-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </section>
-  )
+  );
 }

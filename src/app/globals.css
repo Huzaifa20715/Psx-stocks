@@ -1,65 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #0f172a;
-  --foreground: #f1f5f9;
+  --bg-primary: #050505;
+  --bg-secondary: #0a0a0a;
+  --accent-primary: #6366f1;
+  --accent-secondary: #22d3ee;
+  --accent-tertiary: #8b5cf6;
+  --text-primary: #f8fafc;
+  --text-muted: #64748b;
+  --border: rgba(255, 255, 255, 0.08);
+  --card-bg: rgba(255, 255, 255, 0.03);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #050505;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background-color: #050505;
+  color: #f8fafc;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* Ticker tape animation */
-@keyframes ticker {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-ticker {
-  animation: ticker 60s linear infinite;
-}
-
-.animate-ticker:hover {
-  animation-play-state: paused;
-}
-
-/* Smooth scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1e293b;
+  background: #050505;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #475569;
-  border-radius: 3px;
+  background: #6366f1;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+  background: #8b5cf6;
 }
 
-/* Table styles */
-table {
-  border-collapse: collapse;
+/* Selection */
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: #f8fafc;
 }
 
-/* Number font */
-.font-mono {
-  font-variant-numeric: tabular-nums;
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

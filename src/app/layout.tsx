@@ -1,48 +1,28 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import Ticker from "@/components/layout/Ticker";
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: "PSX Stocks - Pakistan Stock Exchange",
-  description: "Real-time market data, stock screener, and analytics for the Pakistan Stock Exchange (PSX)",
-};
+  title: 'FORTE — Premium Digital Agency',
+  description: 'We build immersive 3D experiences, cutting-edge websites, and digital worlds that captivate and convert.',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full`} suppressHydrationWarning>
-      <body className="min-h-full flex flex-col bg-slate-950 text-slate-100 antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <Header />
-          <Ticker />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </ThemeProvider>
+    <html lang="en" suppressHydrationWarning className={inter.variable}>
+      <body className={inter.className} style={{ backgroundColor: '#050505', color: '#f8fafc' }}>
+        {children}
       </body>
     </html>
-  );
+  )
 }
